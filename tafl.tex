@@ -1,0 +1,961 @@
+\documentclass{memoir}
+\usepackage{chessboard}
+\usepackage{skak}
+\usepackage{wasysym}
+\usepackage[LSB,LSBC3,LSBC4,T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+
+\tightlists
+
+\title{How to play Tafl}
+\newcommand{\subtitle}{Rediscovering Tablut, Hnefatafl, Brandubh and other variations of the Viking game}
+\author{Jon Ericson}
+\renewcommand{\maketitlehookb}{\centering\textsc{\subtitle}}
+
+\makeatletter
+\cbDefineNewPiece{white}{C}
+  {\raisebox{\depth*3}{\cfss@whitepiececolor
+    $\Circle$}}
+  {\BlackEmptySquare%
+   \makebox[0pt][r]{\cfss@whitepiececolor
+    \raisebox{\depth*3}{%
+     \makebox[1em]{$\Circle$}}}}
+\cbDefineNewPiece{black}{c}
+  {\raisebox{\depth*3}{\cfss@blackpiececolor
+    $\CIRCLE$}}
+  {\BlackEmptySquare%
+   \makebox[0pt][r]{\cfss@blackpiececolor
+    \raisebox{\depth*3}{%
+      \makebox[1em]{$\CIRCLE$}}}}
+\cbDefineNewPiece{white}{+}
+  {\raisebox{\depth*3}{\cfss@blackpiececolor
+    $\oplus$}}
+  {\BlackEmptySquare%
+   \makebox[0pt][r]{\cfss@blackpiececolor
+    \raisebox{\depth*3}{%
+     \makebox[1em]{$\oplus$}}}}
+  \makeatother
+  
+  \def\tablutcorners{a1,a9,i1,i9}
+  \def\tablutthrone{e5}
+  \def\tablutcamps{a4,a5,a6,b5,d1,e1,f1,e2,d9,e9,f9,e8,i4,i5,i6,h5}
+  
+
+  \storechessboardstyle{tablut}{
+    color=black,
+    maxfield=i9,
+    blackfieldcolor=white!100,  % https://tex.stackexchange.com/questions/200258/uncheckered-chess-board-using-the-chessboard-package/200270#200270
+    setfontcolors,
+    pgfstyle=border,
+    linewidth=0.5pt,
+    markboard,
+    linewidth=1pt,
+    markstyle=cross,
+    markfields=\tablutcorners,  
+    color=gray!50,
+    backstyle=color,    
+    backfields=\tablutthrone,
+    color=gray!20,
+    backstyle=color,    
+    backfields=\tablutcamps,
+  }
+
+  \def\brandubhcorners{a1,a7,g1,g7}
+  \def\brandubhthrone{d4}
+  
+  \storechessboardstyle{brandubh}{
+    color=black,
+    maxfield=g7,
+    blackfieldcolor=white!100,
+    setfontcolors,
+    pgfstyle=border,
+    linewidth=0.5pt,
+    markboard,
+    linewidth=1pt,
+    markstyle=cross,    
+    markfields=\brandubhcorners,
+    color=gray!50,
+    backstyle=color,    
+    backfields=\brandubhthrone,
+  }
+
+  \def\puzzlecorners{a1,a5,e1,e5}
+  \def\puzzlethrone{c3}
+
+  \storechessboardstyle{puzzle}{
+    color=black,
+    maxfield=e5,
+    blackfieldcolor=white!100,
+    setfontcolors,
+    pgfstyle=border,
+    linewidth=0.5pt,
+    markboard,
+    linewidth=1pt,
+    markstyle=cross,    
+    markfields=\puzzlecorners,
+    color=gray!50,
+    backstyle=color,    
+    backfields=\puzzlethrone,
+  }
+
+  \storechessboardstyle{key}{
+    color=black,
+    maxfield=h1,
+    blackfieldcolor=white!100,
+    setfontcolors,
+    pgfstyle=border,
+    linewidth=0.5pt,
+    markboard,
+    linewidth=1pt,
+    markstyle=cross,    
+    markfields={a1},
+    color=gray!50,
+    backstyle=color,    
+    backfields={b1},
+    addfen={2+Cc},
+    color=gray!20,
+    backstyle=color,    
+    backfields={g1},
+    color=black,
+    markstyle=color,    
+    markfields={h1},
+  }
+  
+\newcommand{\diagramname}{Diagram}
+\newcommand{\listdiagramname}{List of Diagrams}
+\newlistof{listofdiagrams}{dgm}{\listdiagramname}
+\newfloat{diagram}{dgm}{\diagramname}
+\newlistentry{diagram}{dgm}{0}
+
+
+\newtheorem{xexample}{Example}
+\newcommand\listexamplesname{List of Examples}
+\newlistof{listofexamples}{loe}{\listexamplesname}
+\newlistentry[chapter]{examplecounter}{loe}{0}
+\newcommand{\edescription}[1]{%
+\refstepcounter{examplecounter}
+\par\noindent\textbf{Example \theexamplecounter---#1.}
+\addcontentsline{loe}{figure}{\protect\numberline{\theexamplecounter}#1}
+}
+\newenvironment{example}[1][]{\edescription{#1}\par\noindent}{}
+
+\usepackage{answers}
+\Newassociation{sol}{Solution}{ans}
+\renewcommand{\Solutionlabel}[1]{\small{#1.}}
+\newtheorem{ex}{}[section]
+\renewcommand{\theex}{\arabic{ex}}
+\newenvironment{Ex}[1]{\begin{trivlist}\item \textsc{#1} %
+\renewcommand{\Currentlabel}{#1}}{\end{trivlist}}
+
+
+\begin{document}
+%\maketitle
+
+\chapter{How Tafl is played}
+
+A few years ago my wife bought me a really lovely Tablut board printed
+on leather that could be cinched up into a sack for holding the
+pieces. I absolutely love the way it looks. It fills my head with
+romantic notions of playing out a tense match on a barrel head or
+somesuch.  But when I played the game itself\dots well, it was
+frustrating. From the first move to the end of the game, I could not
+grok the strategy required. What's worse, I didn't see how I could
+improve.
+
+At last I did something I normally do by instinct: I searched the
+internet for ``Tablut strategy''. What I discovered was that Tablut
+was part of a long and nearly forgotten tradition of games that come,
+not from a single mind, but was the result of generation after
+generation refining a simple set of rules. 
+
+The names given to these games seem nearly fantastical:
+
+\begin{itemize}
+\item Hnefatafl
+\item Large Hnefatafl 
+\item Alea Evangelii
+\item Tablut
+\item Ard Ri
+\item Brandubh
+\item Fidhchell
+\item Gwyddbwyll
+\item Tawlbwrdd
+\end{itemize}
+
+
+
+\section{Why the name ``Viking Chess'' is misleading}
+
+This book isn't about the history of the Tafl family of games. There
+are many excellent sources which I've included in an appendix. Instead
+this is a book about how to excel when playing these ancient
+games. But in order to accomplish that goal, we need to clear out some
+assumptions that modern people will inevitably make from our habit of
+calling it ``Viking Chess''.
+
+Chess originated in the Indian subcontinent and traveled to Southern
+Europe via Persia. From there it spread north to Scandinavia and the
+rest of the world. Along the way, it was modified and refined until it
+became the modern game we know.
+
+Meanwhile, people in Northern Europe were already playing games that
+likely descended from the ancient Roman game of \emph{Ludus
+Latrunculorum}. Archaeologists have discovered boards carved on wood
+(often with Nine Men's Morris on the reverse) or scratched onto
+stone. These boards ranged in size from 7x7 to 18x18. Some were marked
+to be played in the squares (as with Chess), others in the
+intersections of lines (like Go) and still others used pegs.
+
+While we have a good deal of evidence about the equipment used, the
+rules of Tafl games have been largely lost to time. Before near
+universal literacy, knowledge primarily passed from person to person
+via the spoken word. Over time, Chess supplanted Tafl games in
+Northern Europe, so the rules of the older game ceased to be
+transmitted. Many games have been lost to us for this reason with only
+tentative reconstructions created from cryptic clues left in ancient
+writings.
+
+Thankfully, Carl Linnaeus, who formalized modern biological taxonomy,
+visited Lapland in 1732. Along the way, he observed the culture of the
+Sámi people, including the games they played. One of the games, which
+Linnaeus called Tablut, is played on a 9x9 board with a king, his 8
+defenders and 16 attackers controlled by the other player
+(diagram~\ref{tablut}). The rules he described have been instrumental
+in reconstructing other Tafl games described in less detail by other
+sources.
+
+\begin{diagram}
+  \centering
+  \chessboard[
+    style=tablut,
+    addfen={3ccc/4c/4C/c3C3c/ccCC+CCcc/c3C3c/4C/4c/3ccc},
+    mover=b,
+  ]
+  \caption{The initial position of a game of Tablut.}\label{tablut}
+  The king ($\oplus$) rests on the central throne. His defenders
+  ($\Circle$) extend out in the form of a cross. Attackers ($\CIRCLE$)
+  begin in 4 camps at the edge of the board. Marked with an X are the
+  four corners the king may use to exit the board and win the game.
+\end{diagram}
+
+
+It's not hard to see how this rediscovered game began to be called
+``Viking Chess''. Both games play on a grid and exude a theme of
+military strategy. Board Game Geek, the internet's largest database of
+board games, lists both as ``Abstract Strategy'' with a ``Grid
+Movement'' mechanic. And yet, despite his life's work, Linnaeus didn't
+place the Sámi game in any taxonomy, much less label it as a variant
+of Chess.
+
+\begin{quote}
+The game called \emph{Tablut} is played with a checkered board, and
+twenty-five pieces, or men, in the following manner.---''July 21''
+entry in \emph{A Tour in Lapland} by Carl von Linné and translated by
+Charles Troilius
+\end{quote}
+
+If you want to play a Tablut (or any other Tafl game), treating it as
+a variant of Chess produces disaster. In Chess, opponents eliminate
+enemy forces to open up an attack on the king. In Tafl, one side hopes
+to escort the king to safety while the other endeavors to trap him in
+their net. The first time I won a game of Tablut
+(section~\ref{firstwin}), I was shocked to see three of my pieces had
+been captured and that I'd captured none of theirs. Indeed, while they
+were taking my pieces in one corner, my king executed his escape to
+the opposite corner.
+
+Tafl games work on fundamentally different principles than
+Chess. Experience with Go can be somewhat more useful in that the
+attacker must encircle the king while the defender must prevent that
+fate. Even so, the dynamic nature of the pieces mean the board state
+can change dramatically from one turn to the next. It pays to play
+Tafl games in the Tafl mindset.
+
+
+\section{A note on notation}
+
+\begin{diagram}
+  \centering
+  \chessboard[
+    style=key,
+  ]
+  \caption{Key to Tafl diagrams}\label{key}
+  \begin{enumerate}
+  \item \textbf{a1} contains the exit square marked with an X. Only the
+    king may enter the square.
+  \item \textbf{b1} is shaded to indicate the king's throne.
+  \item The king is standing on \textbf{c1}.
+  \item One of the king's defenders is located on \textbf{d1}. 
+  \item An attacker occupies \textbf{e1}. 
+  \item \textbf{f1} is an ordinary square. 
+  \item The attacker's camp is marked on \textbf{g1}. 
+  \item Some puzzles use blocked squares as shown in \textbf{h1}. This
+    isn't a normal part of Tafl boards.
+  \item The right side of the board sometimes holds a colored square
+    to indicate the side that must move next. 
+  \end{enumerate}
+\end{diagram}
+
+Diagrams should be fairly easy to read once you know the game. I've
+included a key in diagram~\ref{key}.
+
+In addition to diagrams, I'm using a variation of Chess algebraic
+notation that seems to be the common way to record Tafl games. Rows
+are numbered from south to north starting with 1 and columns are
+assigned letters starting with a on the east. Therefore a single
+square can be identified with a letter and a number. For instance, the
+bottom left square is called a1. Movement is show by a pair of squares
+separated by a dash. So moving from the bottom right\footnote{Though
+it is impossible for any piece other than the king to enter that
+square and he never leaves it as the game will have finished at that
+point.} to the next square to the left is recorded a1-b1.
+
+Capturing is indicated by adding an x and the square that was
+captured. So c2-c1xb1 means the piece on c2 captured piece on
+b1.\footnote{We don't need to indicate the other piece that
+participated in the capture since it's implied. In this case, it was
+the a1 corner, not another piece.} On occasion a move results in more
+than one capture. Further captured pieces will be indicated with a
+/. For instance: c2-c1xb1/d1 mean both b1 and d1 were captured.
+
+I'm avoiding naming the sides as ``black and white'' because there's a
+better way to identify them: attacker and defender.\footnote{I also
+use Swedes and Muscovites for the two sides when describing Tablut
+following Linnaeus. It strongly suggests the sides acquired local
+names based on the politics of the area. It's not at all hard to come
+up with novel themes such as Celebrity vs. Paparazzi.} In Chess the
+sides are symmetrical except for the first player. Tafl is inherently
+asymmetrical, so for clarity it's better to identify the goals of each
+side.
+
+Generally the attackers make the first move, but not always. Whichever
+side makes the first move is listed first in game logs. 
+
+Other notations borrowed from Chess:
+
+\begin{description}
+\item[!]an interesting move
+\item[!!]a brilliant move
+\item[?]a bad move
+\item[??]a blunder
+\end{description}
+
+\section{The goal of Tafl}
+
+Whether you are playing Tablut, Hnefatafl, Brandubh or any of the
+other dozen variations of Tafl, the goal remains the same:
+\begin{itemize}
+\item The king attempts to escape the board.
+\item The attackers must stop the king from escaping.
+\end{itemize}
+
+Everything else is a distraction.
+
+
+\section{Default rules}
+
+
+
+\Opensolutionfile{ans}[king-escape]
+\section{King escape puzzles}
+
+One thing we can learn from Chess is the value of puzzles for learning
+to play and get better at the game. For this book, I'm introducing a
+5x5 board (diagram~\ref{puzzleblank}) that's probably too small for a
+competitive Tafl game. But it's just right for Tafl puzzles. As
+always, it helps to set up a physical board to play out the
+puzzles. It's easiest to use a corner of a chessboard and any random
+pieces or markers you have handy. Or you can print out or copy the
+board this book on page~\pageref{puzzleblank}.
+
+
+
+\begin{diagram}
+  \centering
+  \chessboard[
+    style=puzzle,
+    mover=w,
+    largeboard,
+  ]
+  \caption{5x5 version of Tafl for learning the
+    basics.}\label{puzzleblank}
+  This board is too small for a competitive game, but is
+  ideal for creating Tafl puzzles.
+\end{diagram}
+
+
+\begin{ex}
+    \chessboard[
+    style=puzzle,
+    addfen={//2+},
+    mover=w,
+    tinyboard,
+   ]
+   
+   \noindent How many moves must the king make to exit from a corner?
+
+   \begin{sol}
+     \chessboard[
+       style=puzzle,
+       addfen={//2+},
+       mover=w,
+       tinyboard,
+       color=black,
+       pgfstyle=straightmove,
+       markmove=c3-a3,
+       markmove=a3-a1
+     ]
+     
+     It's just two moves. Since the board is symmetrical, there are
+     essentially 4 equivalent ways to do the initial move. After
+     you've broken the symmetry by moving once, there are two ways to
+     end the game: a3-a1 or a3-5.
+   \end{sol}
+\end{ex}
+
+\begin{ex}
+   \chessboard[
+    style=puzzle,
+    addfen={//2+},
+    color=black,
+    markstyle=color,
+    markfields={a3,c1,c5,e3},
+    mover=w,
+    tinyboard,
+   ]
+   
+   \noindent The blacked out squares are impassible. How many moves
+   must the king make to exit from a corner?
+
+   \begin{sol}
+     \chessboard[
+       style=puzzle,
+       addfen={//2+},
+       mover=w,
+       tinyboard,
+       color=black,
+       markstyle=color,
+       markfields={a3,c1,c5,e3},
+       pgfstyle=straightmove,
+       markmove=c3-b3,
+       markmove=b3-b1,
+       markmove=b1-a1,
+     ]
+     
+     The blocked squares add a move to the kings escape
+     plans. Attackers won't let your king just leave, so it's common
+     for the king to make a winding path to the exit.
+   \end{sol}
+\end{ex}
+
+\begin{ex}
+   \chessboard[
+    style=puzzle,
+    addfen={/2C/1C+C/2C},
+    color=black,
+    markstyle=color,
+    markfields={a3,c1,c5,e3},
+    mover=w,
+    tinyboard,
+   ]
+   
+   \noindent What if you have guards?
+
+   \begin{sol}
+     \chessboard[
+       style=puzzle,
+       addfen={/1CC/2+C/2C/},
+       mover=w,
+       tinyboard,
+       color=black,
+       markstyle=color,
+       markfields={a3,c1,c5,e3},
+       pgfstyle=straightmove,
+       markmove=b3-b4,
+       markmove=c3-b3,
+       markmove=b3-b1,
+       markmove=b1-a1,
+     ]
+     
+     Notice that your own pieces get in the king's way. Moving the
+     guard on b3 slows the king down by one move, so it takes 4 in
+     total.  There are certainly times when you'll wish you have just
+     one fewer pieces on the board.
+   \end{sol}
+\end{ex}
+
+\begin{ex}
+   \chessboard[
+    style=puzzle,
+    addfen={2c//c1+1c//2c},
+    mover=w,
+    tinyboard,
+   ]
+   
+   \noindent Can the king escape if there are 4 attackers who can move in response?
+
+   \begin{sol}
+     Yes, unless captures are allowed.
+     
+     \chessboard[
+       style=puzzle,
+       addfen={2c//c+2c//1c},
+       showmover=false,
+       tinyboard,
+       color=black,
+       pgfstyle=straightmove,
+       markmove=c3-b3,
+       markmove=c1-b1,
+     ]
+     \chessboard[
+       style=puzzle,
+       addfen={2c//c+2c//1c},
+       showmover=false,
+       tinyboard,
+       color=black,
+       pgfstyle=straightmove,
+       markmove=b3-b5,
+       markmove=b5-a5,
+     ]
+
+
+     If it is possible to capture the king against the edge of the
+     board and the exit (as is the case with many Tafl games), the
+     king will be captured by 2\dots~b1-b4xb5. 
+     
+     \chessboard[
+       style=puzzle,
+       addfen={1+c/1c/c3c/},
+       showmover=false,
+       tinyboard,
+       color=black,
+       pgfstyle=straightmove,
+       markmove=b1-b4,
+     ]
+
+     The attackers can continually lay that trap by carefully chasing
+     the king around the board.
+
+     \chessboard[
+       style=puzzle,
+       addfen={2c//c+2c//1c},
+       showmover=false,
+       tinyboard,
+       color=black,
+       pgfstyle=straightmove,
+       markmove=c3-b3,
+       markmove=c1-b1,
+     ]
+     \chessboard[
+       style=puzzle,
+       addfen={2c//c/1+2c/1c},
+       showmover=false,
+       tinyboard,
+       color=black,
+       pgfstyle=straightmove,
+       markmove=b3-b2,
+       markmove=e3-e2,
+     ]
+     \chessboard[
+       style=puzzle,
+       addfen={2c//c/3+c/3c},
+       showmover=false,
+       tinyboard,
+       color=black,
+       pgfstyle=straightmove,
+       markmove=b2-d2,
+       markmove=b1-d1,
+     ]
+     \chessboard[
+       style=puzzle,
+       addfen={2c/3+c/c//3c},
+       showmover=false,
+       tinyboard,
+       color=black,
+       pgfstyle=straightmove,
+       markmove=d2-d4,
+       markmove=e2-e4,
+     ]
+
+     
+   \end{sol}
+\end{ex}
+
+\begin{ex}
+   \chessboard[
+    style=puzzle,
+    addfen={1c/c2c/2+/4c},
+    mover=w,
+    tinyboard,
+   ]
+   
+   \noindent The king can guarantee his escape. What is his next move?
+
+   \begin{sol}
+     According to Linnaeus, when a king has a path to escape, the
+     defender must say \emph{raichi}. In this case, moving to a3, c5
+     or e3 would give the king one way to escape. But each of those
+     paths can be blocked by an attacker (e2-a2, d4-d5 or d4-e4). But
+     if the king moves to c1 the defender would need to say
+     \emph{tuichu}, which means he has two exits and has won the
+     game. Both of those exits may be blocked (b5-b1 and d4-d1), but
+     the king has time to take the other exit.
+
+     \chessboard[
+       style=puzzle,
+       addfen={1c/c2c//4c/2+},
+       mover=b,
+       tinyboard,
+       color=black,
+       pgfstyle=straightmove,
+       markmove=c1-a1,
+       markmove=c1-e1,
+     ]
+
+   \end{sol}
+\end{ex}
+
+\Closesolutionfile{ans}
+
+\section{King Escape puzzle answers}
+\input{king-escape}
+
+
+\section{An annotated game}\label{firstwin}
+
+This is my first Talbut win on Board Game Arena, the online game
+service. It's not a particularly well-played game, to be
+honest. Reviewing the game, I've noticed several obvious mistakes on
+both sides. 
+
+\chessboard[
+  style=tablut,
+  addfen={3ccc/4c/2C1C/c3C3c/cc1C+CCcc/c3C3c/4C/4c/3ccc},
+  mover=w,
+  tinyboard,
+  color=black,
+  pgfstyle=straightmove,
+  markmove=c5-c7
+]
+\chessboard[
+  style=tablut,
+  addfen={4cc/4c/2CcC/c3C3c/cc1C+CCcc/c3C3c/4C/4c/3ccc},
+  mover=b,
+  tinyboard,
+  color=black,
+  pgfstyle=straightmove,
+  markmove=d9-d7
+]
+1. c5-c7 d9-d7
+
+The Swedes (white) must clear out a path for their king to get to one
+of the four corners. I don't know if my initial move is ideal, but my
+goal was to start clearing out a space for the king. The outer guards
+have more freedom to block the Muscovites (black) so that the inner
+guards to make a hole for the king to leave the throne. To me the
+Muscovite move is perhaps too aggressive. It does threaten two Swedish
+guards and I'm certain to lose at least one if they want to take it.
+
+\chessboard[
+  style=tablut,
+  addfen={4cc/4c/2CcC/c3C3c/cc1C+CCcc/c3C3c/3C/4c/3ccc},
+  mover=w,
+  tinyboard,
+  color=black,
+  pgfstyle=straightmove,
+  markmove=e3-d3
+]
+\chessboard[
+  style=tablut,
+  addfen={ 4cc/4c/1c1cC/c3C3c/c2C+CCcc/c3C13c/3C/4c/3ccc},
+  mover=b,
+  tinyboard,
+  color=black,
+  pgfstyle=straightmove,
+  markmove=b5-b7
+]
+2. e3-d3 b5-b7xc7
+
+Instead of moving one of my threatened guards out of the way, I take
+the initiative on the other side of the board. The Muscovites go ahead
+and take one of the Swedish guards.
+
+\chessboard[
+  style=tablut,
+  addfen={4cc/4c/1c1cC/c3C3c/c2C+C1cc/c3C1C1c/3C/4c/3ccc},
+  mover=w,
+  tinyboard,
+  color=black,
+  pgfstyle=straightmove,
+  markmove=g5-g4
+]
+\chessboard[
+  style=tablut,
+  addfen={4c/4c/1c1c1c/c3C3c/c2C+C1cc/c3C1C1c/3C/4c/3ccc},
+  mover=b,
+  tinyboard,
+  color=black,
+  pgfstyle=straightmove,
+  markmove=f9-f7
+]
+3. g5-g4 f9-f7xe7
+
+Having already lost one guard, I proceed to sacrifice the other one
+and concentrate on developing the opposite corner. That sacrifice was
+accepted.
+
+\chessboard[
+  style=tablut,
+  addfen={4c/4c/1c1c1c/c3C3c/c2C+C1cc/c2C2C1c/3C/4c/3ccc},
+  mover=w,
+  tinyboard,
+  color=black,
+  pgfstyle=straightmove,
+  markmove=e4-d4
+]
+\chessboard[
+  style=tablut,
+  addfen={4c/4c/1c1c1c2c/c3C/c2C+C1cc/c2C2C1c/3C/4c/3ccc},
+  mover=b,
+  tinyboard,
+  color=black,
+  pgfstyle=straightmove,
+  markmove=i6-i7
+]
+4. e4-d4 i6-i7?
+
+I'm ready to move an inner guard in preparation of moving my king
+toward one of the bottom corners. In particular, i1 is looking
+particularly promising.
+
+Meanwhile the Muscovites have yet to move any piece below the 5
+line. Assuming they insist on moving i6, a better move would have been
+4\dots~i6-g6 which more directly protects i9. But something more
+direct to hemming in the king (4\dots~f1-f3, perhaps) would have been
+better.
+
+\chessboard[
+  style=tablut,
+  addfen={4c/4c/1c1c1c2c/c3C/c2C1Cc1c/c2C2C1c/3C+/4c/3ccc},
+  mover=w,
+  tinyboard,
+  color=black,
+  pgfstyle=straightmove,
+  markmove=e5-e3
+]
+\chessboard[
+  style=tablut,
+  addfen={4c/4c/1c1c1c2c/c3C/c2C1Cc1c/c2C2C1c/3C+c/4c/3cc},
+  mover=b,
+  tinyboard,
+  color=black,
+  pgfstyle=straightmove,
+  markmove=f1-f3
+]
+5. e5-e3 f1-f3
+
+It's always momentous when the king steps off the throne. On the 3
+row, he has easy access to the open h column with the possibility of
+moving to the open c column if blocked. Indeed, 5\dots~f1-f3
+effectively limits his movement toward the right side of the board.
+
+\chessboard[
+  style=tablut,
+  addfen={4c/4c/1c1c1c2c/c3C/c2C1Cc1c/c2C2C1c/C3+c/4c/3cc},
+  mover=w,
+  tinyboard,
+  color=black,
+  pgfstyle=straightmove,
+  markmove=d3-a3
+]
+\chessboard[
+  style=tablut,
+  addfen={4c/4c/1c1c1c2c/c3C/c2C1Cc1c/c2C2C1c/4+c/c/3cc},
+  mover=b,
+  tinyboard,
+  color=black,
+  pgfstyle=straightmove,
+  markmove=e2-a2
+]
+6. d3-a3? e2-a2xa3??
+
+My goal was to escape along the open c column and my plan was to use
+the 3 row. However, I didn't consider 6\dots~d1-d3, which would have
+blocked the king from the bottom half of the board. A better move
+would have been 6.~d3-d2, which would have opened up the c column
+without allowing the attackers to block.
+
+Fortunately for me, the temptation to capture a3 proved too great. In
+addition to failing to block my escape, the Muscovites gave me tempo
+and the 2 row. From here on the only question is whether the king will
+choose the right path.
+
+\chessboard[
+  style=tablut,
+  addfen={4c/4c/1c1c1c2c/c3C/c2C1Cc1c/c2C2C1c/5c/c3+/3cc},
+  mover=w,
+  tinyboard,
+  color=black,
+  pgfstyle=straightmove,
+  markmove=e3-e2
+]
+\chessboard[
+  style=tablut,
+  addfen={4c/4c/1c1c1c2c/c3C/c2C1Cc1c/c2C2C/5c/c3+3c/3cc},
+  mover=b,
+  tinyboard,
+  color=black,
+  pgfstyle=straightmove,
+  markmove=i4-i2
+]
+7. e3-e2! i4-i2
+
+At first glance 7.~e3-c3 gives the king an easy escape to either a1 or
+a9 depending on the attacker's response. But consider 7\dots~e8-c8
+8.~c3-c1 b7-b1. The king would be in a very tight situation and must
+hope to get back to the h column somehow.
+
+Moving down to the 2 row forces 7\dots~i4-i2 because of 8.~e2-i2 \dots
+9.~i2-i1.
+
+\chessboard[
+  style=tablut,
+  addfen={4c/4c/1c1c1c2c/c3C/c2C1Cc1c/c2C2C/5c/c6+c/3cc},
+  mover=w,
+  tinyboard,
+  color=black,
+  pgfstyle=straightmove,
+  markmove=e2-h2
+]
+8. e2-h2 Muscovites resign
+
+There are only two responses to the king moving to the h column:
+\begin{itemize}
+\item 8\dots~e1-h1 (Or maybe 8\dots~e1-h1 and hope the king will walk into the 9.~h2-h1 i2-h2 trap?)
+\item 8\dots~i5-h5
+\end{itemize}  
+Whichever route the attackers block, the king will use the other.
+
+\chessboard[
+  style=brandubh,
+  addfen={3c/3c/3C/ccC+Cccc/3C/3c/3c},
+  mover=b,
+]
+
+
+\chessboard[
+  style=tablut,
+  addfen={3ccc/4c/4C/c3C3c/ccCC+CCcc/c3C/4C/4c3c/3ccc},
+  mover=b,
+  tinyboard,
+  color=black,
+  pgfstyle=straightmove,
+  markmove=i4-i2
+]
+\chessboard[
+  style=tablut,
+  addfen={3ccc/4c/4C/c3C3c/ccCC+CCcc/c3C/7C/4c3c/3ccc},
+  mover=w,
+  tinyboard,
+  color=black,
+  pgfstyle=straightmove,
+  markmove=e3-h3
+]
+1. i4-i2 e3-h3
+
+\chessboard[
+  style=tablut,
+  addfen={3ccc/4c/4C/c3C3c/ccCC+CCcc/c3C/4c2C/8c/3ccc},
+  mover=b,
+  tinyboard,
+  color=black,
+  pgfstyle=straightmove,
+  markmove=e2-e3
+]
+\chessboard[
+  style=tablut,
+  addfen={3ccc/4c/4C/c3C3c/cc1C+CCcc/c3C/4c2C/2C5c/3ccc},
+  mover=w,
+  tinyboard,
+  color=black,
+  pgfstyle=straightmove,
+  markmove=c5-c2
+]
+2. e2-e3 c5-c2
+
+\chessboard[
+  style=tablut,
+  addfen={3ccc/4c/4C/c3C3c/c1cC+CCcc/c3C/4c2C/2C5c/3ccc},
+  mover=b,
+  tinyboard,
+  color=black,
+  pgfstyle=straightmove,
+  markmove=b5-c5
+]
+\chessboard[
+  style=tablut,
+  addfen={3ccc/4c/4C/c3C3c/c1cC+CCcc/c3C/4c2C/2C5c/3ccc},
+  mover=w,
+  tinyboard,
+  color=black,
+  pgfstyle=straightmove,
+  markmove=c2-e2
+]
+3. b5-c5 c2-e2xe3
+
+\chessboard[
+  style=tablut,
+  addfen={3ccc/4c/4C/c3C3c/c1cC+CCcc/c3C3c/4C2c/2C5c/3ccc},
+  mover=w,
+  tinyboard,
+  color=black,
+  pgfstyle=straightmove,
+  markmove=c2-e2
+]
+\chessboard[
+  style=tablut,
+  addfen={3ccc/4c/4C/c3C3c/c1cC+CCcc/c3C3c/7C/4C/3ccc},
+  mover=b,
+  tinyboard,
+  color=black,
+  pgfstyle=straightmove,
+  markmove=d1-d2
+]
+3. c2-e2xe3 d1-d2
+
+4. h3-i3xi2 f1-f2xe2
+
+5. g5-g3 e1-e3
+
+6. e6-c6 i6-e6xe7
+
+7. f5-f6 h5-g5
+
+8. d5-d6xe6 a4-d4
+
+9. e5-e7 f2-f4xe4
+
+10. e7-i7 e8-i2
+
+11. i7-h7 f9-h9
+
+12. h7-h1
+
+\clearpage
+
+% \listofdiagrams
+
+
+\url{http://aagenielsen.dk/hnefatafl_online.php}
+\url{http://tafl.cyningstan.com/page/29/forming-a-strategic-plan}
+\url{https://bonaludo.com/2019/02/06/tablut-and-linnaeus-contribution-to-the-world-of-games/}
+\url{https://www.gutenberg.org/ebooks/34779}
+\url{http://tafl.cyningstan.com/}
+\url{https://www.fotevikensmuseum.se/d/en/vikingar/hur/spel/regler}
+\url{https://boardgamegeek.com/geeklist/35348/how-tafl-articles-my-review-series-tafl-games}
+\url{http://tafl.cyningstan.com/page/92/archaeological-finds}
+
+\end{document}
+
+% LocalWords:  Tafl Tablut Brandubh Muscovites

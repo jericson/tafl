@@ -1,0 +1,89 @@
+%% E8-C8 
+%% C5-C6 
+%% E2-G2 
+%% E4-D4 
+%% H5-H7 
+%% E3-E2 
+%% B5-B3 
+%% G5-G4 
+%% C8-G8 
+%% D5-D8 
+%% A5-D5 
+%% C6-D6xD5 
+%% B3-B5 
+%% E5-C5 
+%% A6-B6 
+%% C5-C1+
+
+%% \begin{diagram}
+
+%%   % i4-i3, c5-c3, d1-d3, e7-d7,b5-b3,g5-g6,f1-f3,e6,d6,h5-g6,e5-e7,f9-f7,d7-a7,e8-a8,e7-e8,i6-i8,e8-h8
+
+%%  \setchessboard{
+%%     style=tablut,
+%%     showmover=false,
+%%     tinyboard,
+%%  }
+%%  \chessboard[    addfen={3ccc/4c/4C/c3C3c/ccCC+CCcc/c3C3c/4C/4c/3ccc},
+%% ]
+ 
+%%  \foreach \f/\t in {
+%%    c5/Cc2,
+%%    d1/cd3,
+%%    e7/Cd7,
+%%    b5/cb5,
+%%    g5/Cg6,
+%%    f1/cf1,
+%%    e6/Cd6,
+%%    h5/cg5,
+%%    e5/+e7
+%%  }{
+%%    \setchessboard{
+%%      addpieces={\t},
+%%        showmover=false,
+%%       color=black,
+%%       pgfstyle=straightmove,
+%%     }
+%%     \chessboard
+%%   }
+%%   \caption{This is the final position when my opponent resigned to
+%%     give me my first win in Tablut. Notice I'm missing 3 of my pieces
+%%     ($\Circle$) without taking any from the attacker.}\label{firstwin}
+%% \end{diagram}
+
+
+\begin{diagram}
+
+  % i4-i3, c5-c3, d1-d3, e7-d7,b5-b3,g5-g6,f1-f3,e6,d6,h5-g6,e5-e7,f9-f7,d7-a7,e8-a8,e7-e8,i6-i8,e8-h8
+
+  \foreach \f in {
+    3ccc/4c/4C/c3C3c/ccCC+CCcc/c3C3c/4C/4c/3ccc,
+    3ccc/4c/2C1C/c3C3c/cc1C+CCcc/c3C3c/4C/4c/3ccc,
+    4cc/4c/2CcC/c3C3c/cc1C+CCcc/c3C3c/4C/4c/3ccc,
+    4cc/4c/2CcC/c3C3c/cc1C+CCcc/c3C3c/3C/4c/3ccc,
+    4cc/4c/1c1cC/c3C3c/c2C+CCcc/c3C13c/3C/4c/3ccc,
+    4cc/4c/1c1cC3c/c3C/c2C+C1cc/c3C1C1c/3C/4c/3ccc,
+    4c/4c/1c1c1c2c/c3C/c2C+C1cc/c3C1C1c/3C/4c/3ccc,
+    4c/4c/1c1c1c2c/c3C/c2C+C1cc/c2C2C1c/3C/4c/3ccc,
+    4c/4c/1c1c1c2c/c3C/c2C+Cc1c/c2C2C1c/3C/4c/3ccc,
+    4c/4c/1c1c1c2c/c3C/c2C1Cc1c/c2C2C1c/3C+/4c/3ccc,
+    4c/4c/1c1c1c2c/c3C/c2C1Cc1c/c2C2C1c/3C+c/4c/3cc,
+    4c/4c/1c1c1c2c/c3C/c2C1Cc1c/c2C2C1c/C3+c/4c/3cc,
+    4c/4c/1c1c1c2c/c3C/c2C1Cc1c/c2C2C1c/4+c/c/3cc,
+    4c/4c/1c1c1c2c/c3C/c2C1Cc1c/c2C2C1c/5c/c3+/3cc,
+    4c/4c/1c1c1c2c/c3C/c2C1Cc1c/c2C2C/5c/c3+3c/3cc,
+    4c/4c/1c1c1c2c/c3C/c2C1Cc1c/c2C2C/5c/c6+c/3cc}
+  {
+    \chessboard[
+      style=tablut,
+      addfen={\f},
+      showmover=false,
+      tinyboard,
+      color=black,
+      pgfstyle=straightmove,
+    ]
+  }
+  \caption{My first win in Tablut. Notice I'm missing 3 of my pieces
+    ($\Circle$) without having taken any from the attacker.}\label{firstwin}
+\end{diagram}
+\clearpage

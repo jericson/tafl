@@ -1,0 +1,169 @@
+\begin{Solution}{1}
+     \chessboard[
+       style=puzzle,
+       addfen={//2+},
+       mover=w,
+       tinyboard,
+       color=black,
+       pgfstyle=straightmove,
+       markmove=c3-a3,
+       markmove=a3-a1
+     ]
+
+     It's just two moves. Since the board is symmetrical, there are
+     essentially 4 equivalent ways to do the initial move. After
+     you've broken the symmetry by moving once, there are two ways to
+     end the game: a3-a1 or a3-5.
+   
+\end{Solution}
+\begin{Solution}{2}
+     \chessboard[
+       style=puzzle,
+       addfen={//2+},
+       mover=w,
+       tinyboard,
+       color=black,
+       markstyle=color,
+       markfields={a3,c1,c5,e3},
+       pgfstyle=straightmove,
+       markmove=c3-b3,
+       markmove=b3-b1,
+       markmove=b1-a1,
+     ]
+
+     The blocked squares add a move to the kings escape
+     plans. Attackers won't let your king just leave, so it's common
+     for the king to make a winding path to the exit.
+   
+\end{Solution}
+\begin{Solution}{3}
+     \chessboard[
+       style=puzzle,
+       addfen={/1CC/2+C/2C/},
+       mover=w,
+       tinyboard,
+       color=black,
+       markstyle=color,
+       markfields={a3,c1,c5,e3},
+       pgfstyle=straightmove,
+       markmove=b3-b4,
+       markmove=c3-b3,
+       markmove=b3-b1,
+       markmove=b1-a1,
+     ]
+
+     Notice that your own pieces get in the king's way. Moving the
+     guard on b3 slows the king down by one move, so it takes 4 in
+     total.  There are certainly times when you'll wish you have just
+     one fewer pieces on the board.
+   
+\end{Solution}
+\begin{Solution}{4}
+     Yes, unless captures are allowed.
+
+     \chessboard[
+       style=puzzle,
+       addfen={2c//c+2c//1c},
+       showmover=false,
+       tinyboard,
+       color=black,
+       pgfstyle=straightmove,
+       markmove=c3-b3,
+       markmove=c1-b1,
+     ]
+     \chessboard[
+       style=puzzle,
+       addfen={2c//c+2c//1c},
+       showmover=false,
+       tinyboard,
+       color=black,
+       pgfstyle=straightmove,
+       markmove=b3-b5,
+       markmove=b5-a5,
+     ]
+
+
+     If it is possible to capture the king against the edge of the
+     board and the exit (as is the case with many Tafl games), the
+     king will be captured by 2\dots~b1-b4xb5.
+
+     \chessboard[
+       style=puzzle,
+       addfen={1+c/1c/c3c/},
+       showmover=false,
+       tinyboard,
+       color=black,
+       pgfstyle=straightmove,
+       markmove=b1-b4,
+     ]
+
+     The attackers can continually lay that trap by carefully chasing
+     the king around the board.
+
+     \chessboard[
+       style=puzzle,
+       addfen={2c//c+2c//1c},
+       showmover=false,
+       tinyboard,
+       color=black,
+       pgfstyle=straightmove,
+       markmove=c3-b3,
+       markmove=c1-b1,
+     ]
+     \chessboard[
+       style=puzzle,
+       addfen={2c//c/1+2c/1c},
+       showmover=false,
+       tinyboard,
+       color=black,
+       pgfstyle=straightmove,
+       markmove=b3-b2,
+       markmove=e3-e2,
+     ]
+     \chessboard[
+       style=puzzle,
+       addfen={2c//c/3+c/3c},
+       showmover=false,
+       tinyboard,
+       color=black,
+       pgfstyle=straightmove,
+       markmove=b2-d2,
+       markmove=b1-d1,
+     ]
+     \chessboard[
+       style=puzzle,
+       addfen={2c/3+c/c//3c},
+       showmover=false,
+       tinyboard,
+       color=black,
+       pgfstyle=straightmove,
+       markmove=d2-d4,
+       markmove=e2-e4,
+     ]
+
+
+   
+\end{Solution}
+\begin{Solution}{5}
+     According to Linnaeus, when a king has a path to escape, the
+     defender must say \emph{raichi}. In this case, moving to a3, c5
+     or e3 would give the king one way to escape. But each of those
+     paths can be blocked by an attacker (e2-a2, d4-d5 or d4-e4). But
+     if the king moves to c1 the defender would need to say
+     \emph{tuichu}, which means he has two exits and has won the
+     game. Both of those exits may be blocked (b5-b1 and d4-d1), but
+     the king has time to take the other exit.
+
+     \chessboard[
+       style=puzzle,
+       addfen={1c/c2c//4c/2+},
+       mover=b,
+       tinyboard,
+       color=black,
+       pgfstyle=straightmove,
+       markmove=c1-a1,
+       markmove=c1-e1,
+     ]
+
+   
+\end{Solution}
